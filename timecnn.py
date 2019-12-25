@@ -147,7 +147,7 @@ optimizer=optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
 
 # Training
 epo=100;
-
+trackLoss=np.zeros(shape=(epo,1))
 for epoch in range(epo):
     running_loss=0.0
     for i,data in enumerate(dataX,0):
@@ -161,8 +161,15 @@ for epoch in range(epo):
         running_loss+=loss.item()
         if i % int(p*group/batch)==int(p*group/batch)-1:
             print('[%d, %5d] loss: %.3f' % (epoch+1, i+1, running_loss/int(p*group/batch)))
+            trackLoss[epoch]=running_loss/int(p*group/batch)
             running_loss=0.0
 print('Done!')
+# Display loss trend
+plt.plot(trackLoss)
+plt.xlabel('epoch-1')
+plt.ylabel('Loss-Error')
+plt.title('Loss action')
+plt.show()
 
 test=2
 outputs=net(matFTest[test,:,:,:])
